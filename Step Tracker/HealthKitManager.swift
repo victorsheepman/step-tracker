@@ -53,44 +53,6 @@ import Observation
         let weights = try! await weightQuery.result(for: store)
     }
     
-    func fetchStepCountDummy() async{
-        // Create a predicate for this week's samples.
-        let calendar = Calendar(identifier: .gregorian)
-        let today = calendar.startOfDay(for: Date())
-
-
-        guard let endDate = calendar.date(byAdding: .day, value: 1, to: today) else {
-            fatalError("*** Unable to calculate the end time ***")
-        }
-
-
-        guard let startDate = calendar.date(byAdding: .day, value: -7, to: endDate) else {
-            fatalError("*** Unable to calculate the start time ***")
-        }
-
-
-        let thisWeek = HKQuery.predicateForSamples(withStart: startDate, end: endDate)
-
-
-        // Create the query descriptor.
-        let stepType = HKQuantityType(.stepCount)
-        let stepsThisWeek = HKSamplePredicate.quantitySample(type: stepType, predicate:thisWeek)
-        let everyDay = DateComponents(day:1)
-
-
-        let sumOfStepsQuery = HKStatisticsCollectionQueryDescriptor(
-            predicate: stepsThisWeek,
-            options: .cumulativeSum,
-            anchorDate: endDate,
-            intervalComponents: everyDay)
-
-
-        let stepCounts = try! await sumOfStepsQuery.result(for: store)
-
-
-        // Use the statistics collection here.
-    }
-    
     func addSimulatorData() async{
         var mockSamples: [HKQuantitySample] = []
         
