@@ -35,8 +35,14 @@ import Observation
             intervalComponents: .init(day:1)
         )
         
-        let stepCounts = try! await stepsQuery.result(for: store)
-        stepData = stepCounts.statistics().map{ .init(date: $0.startDate, value:$0.sumQuantity()?.doubleValue(for: .count()) ?? 0) }
+    
+        
+        do {
+            let stepCounts = try! await stepsQuery.result(for: store)
+            stepData = stepCounts.statistics().map{ .init(date: $0.startDate, value:$0.sumQuantity()?.doubleValue(for: .count()) ?? 0) }
+        } catch {
+            
+        }
         
     }
     
