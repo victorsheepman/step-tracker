@@ -15,6 +15,7 @@ import Observation
     
     let types: Set = [HKQuantityType(.stepCount), HKQuantityType(.bodyMass)]
     
+    //OBTENER LOS PASOS DE UN PERIODO DE 28 DIAS
     func fetchStepCount() async{
         
         let calendar = Calendar.current
@@ -34,6 +35,7 @@ import Observation
         let stepCounts = try! await stepsQuery.result(for: store)
     }
     
+    //OBTENER EL PESO DE UN PERIODO DE 28 DIAS
     func fetchWeights() async{
         
         let calendar = Calendar.current
@@ -53,6 +55,7 @@ import Observation
         let weights = try! await weightQuery.result(for: store)
     }
     
+    //AGREGAR DATA SIMULADA A NUESTRA APP DE HEALTHKIT
     func addSimulatorData() async{
         var mockSamples: [HKQuantitySample] = []
         
