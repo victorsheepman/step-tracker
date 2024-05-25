@@ -15,6 +15,9 @@ import Observation
     
     let types: Set = [HKQuantityType(.stepCount), HKQuantityType(.bodyMass)]
     
+    var stepData:[HealthMetric] = []
+    var weightData:[HealthMetric] = []
+    
     //OBTENER LOS PASOS DE UN PERIODO DE 28 DIAS
     func fetchStepCount() async{
         
@@ -33,6 +36,8 @@ import Observation
         )
         
         let stepCounts = try! await stepsQuery.result(for: store)
+        stepData = stepCounts.statistics().map{ .init(date: $0.startDate, value:$0.sumQuantity()?.doubleValue(for: .count()) ?? 0) }
+        
     }
     
     //OBTENER EL PESO DE UN PERIODO DE 28 DIAS
@@ -53,6 +58,7 @@ import Observation
         )
         
         let weights = try! await weightQuery.result(for: store)
+        weightData = weights.statistics().map{ .init(date: $0.startDate, value: $0.mostRecentQuantity()?.doubleValue(for: .pound()) ?? 0) }
     }
     
     //AGREGAR DATA SIMULADA A NUESTRA APP DE HEALTHKIT
