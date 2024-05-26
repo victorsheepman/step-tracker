@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		841A54282C03A5E100DBBB60 /* StepBarChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841A54272C03A5E100DBBB60 /* StepBarChartView.swift */; };
 		842748B82BFD587000C8AB1F /* HealthDataListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842748B72BFD587000C8AB1F /* HealthDataListView.swift */; };
 		844033F92BFEAB8B008C54B8 /* HealthKitPermissionPrimingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844033F82BFEAB8B008C54B8 /* HealthKitPermissionPrimingView.swift */; };
 		844033FC2BFEB315008C54B8 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844033FB2BFEB315008C54B8 /* HealthKitManager.swift */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		841A54272C03A5E100DBBB60 /* StepBarChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepBarChartView.swift; sourceTree = "<group>"; };
 		842748B72BFD587000C8AB1F /* HealthDataListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthDataListView.swift; sourceTree = "<group>"; };
 		844033F82BFEAB8B008C54B8 /* HealthKitPermissionPrimingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitPermissionPrimingView.swift; sourceTree = "<group>"; };
 		844033FA2BFEB120008C54B8 /* Step Tracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Step Tracker.entitlements"; sourceTree = "<group>"; };
@@ -41,6 +43,40 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		841A54292C03A88A00DBBB60 /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				84A396DB2BFC0809007AA957 /* DashboardView.swift */,
+				844033F82BFEAB8B008C54B8 /* HealthKitPermissionPrimingView.swift */,
+				842748B72BFD587000C8AB1F /* HealthDataListView.swift */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		841A542A2C03A8A100DBBB60 /* Charts */ = {
+			isa = PBXGroup;
+			children = (
+				841A54272C03A5E100DBBB60 /* StepBarChartView.swift */,
+			);
+			path = Charts;
+			sourceTree = "<group>";
+		};
+		841A542B2C03A8C600DBBB60 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				845715B22C0221C00037ACB8 /* HealthMetric.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		841A542C2C03A8D200DBBB60 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				844033FB2BFEB315008C54B8 /* HealthKitManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
 		84A396CD2BFC0809007AA957 = {
 			isa = PBXGroup;
 			children = (
@@ -62,11 +98,10 @@
 			children = (
 				844033FA2BFEB120008C54B8 /* Step Tracker.entitlements */,
 				84A396D92BFC0809007AA957 /* Step_TrackerApp.swift */,
-				84A396DB2BFC0809007AA957 /* DashboardView.swift */,
-				845715B22C0221C00037ACB8 /* HealthMetric.swift */,
-				844033FB2BFEB315008C54B8 /* HealthKitManager.swift */,
-				844033F82BFEAB8B008C54B8 /* HealthKitPermissionPrimingView.swift */,
-				842748B72BFD587000C8AB1F /* HealthDataListView.swift */,
+				841A542C2C03A8D200DBBB60 /* Managers */,
+				841A542B2C03A8C600DBBB60 /* Model */,
+				841A542A2C03A8A100DBBB60 /* Charts */,
+				841A54292C03A88A00DBBB60 /* Screens */,
 				84A396DD2BFC080A007AA957 /* Assets.xcassets */,
 				84A396DF2BFC080A007AA957 /* Preview Content */,
 			);
@@ -154,6 +189,7 @@
 				842748B82BFD587000C8AB1F /* HealthDataListView.swift in Sources */,
 				84A396DC2BFC0809007AA957 /* DashboardView.swift in Sources */,
 				84A396DA2BFC0809007AA957 /* Step_TrackerApp.swift in Sources */,
+				841A54282C03A5E100DBBB60 /* StepBarChartView.swift in Sources */,
 				844033FC2BFEB315008C54B8 /* HealthKitManager.swift in Sources */,
 				844033F92BFEAB8B008C54B8 /* HealthKitPermissionPrimingView.swift in Sources */,
 				845715B32C0221C00037ACB8 /* HealthMetric.swift in Sources */,
