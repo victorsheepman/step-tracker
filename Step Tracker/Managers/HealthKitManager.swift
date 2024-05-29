@@ -17,6 +17,7 @@ import Observation
     
     var stepData:[HealthMetric] = []
     var weightData:[HealthMetric] = []
+    var weightDiffData:[HealthMetric] = []
     
     //OBTENER LOS PASOS DE UN PERIODO DE 28 DIAS
     func fetchStepCount() async{
@@ -65,6 +66,26 @@ import Observation
         
         let weights = try! await weightQuery.result(for: store)
         weightData = weights.statistics().map{ .init(date: $0.startDate, value: $0.mostRecentQuantity()?.doubleValue(for: .pound()) ?? 0) }
+    }
+    
+    func fetchWeightsDiff() async{
+        
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for:.now)
+        let endDate = calendar.date(byAdding: .day,value:1, to: today)!
+        let startDate = calendar.date(byAdding: .day,value:-29, to: endDate)!
+        
+        let queryPredicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate)
+        let samplePredicate = HKSamplePredicate.quantitySample(type: HKQuantityType(.bodyMass), predicate: queryPredicate)
+        let weightQuery = HKStatisticsCollectionQueryDescriptor(
+            predicate: samplePredicate,
+            options: .mostRecent,
+            anchorDate: endDate,
+            intervalComponents: .init(day:1)
+        )
+        
+        let weights = try! await weightQuery.result(for: store)
+        weightDiffData = weights.statistics().map{ .init(date: $0.startDate, value: $0.mostRecentQuantity()?.doubleValue(for: .pound()) ?? 0) }
     }
     
     //AGREGAR DATA SIMULADA A NUESTRA APP DE HEALTHKIT
