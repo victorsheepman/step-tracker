@@ -86,6 +86,8 @@ import Observation
         
         let weights = try! await weightQuery.result(for: store)
         weightDiffData = weights.statistics().map{ .init(date: $0.startDate, value: $0.mostRecentQuantity()?.doubleValue(for: .pound()) ?? 0) }
+        
+        
     }
     
     //AGREGAR DATA SIMULADA A NUESTRA APP DE HEALTHKIT

@@ -45,6 +45,7 @@ struct DashboardView: View {
                         StepPieChartView(chartData: ChartMath.averageWeekdauCount(for: hkManager.stepData))
                     case .weight:
                         WeightLineChartView(selectedStat: selectedStat, chartData: hkManager.weightData)
+                        WeightBarChartView(chartData: ChartMath.averageDailyWeightDiffs(for: hkManager.weightDiffData))
                     }
                     
                     
@@ -55,6 +56,7 @@ struct DashboardView: View {
             .task{
                 await hkManager.fetchStepCount()
                 await hkManager.fetchWeights()
+                await hkManager.fetchWeightsDiff()
                 isShowingPermissionPrimingSheet = !hasSeenPermissionPriming
             }
             .navigationTitle("Dashboard")
