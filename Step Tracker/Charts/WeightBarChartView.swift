@@ -1,25 +1,21 @@
 //
-//  StepBarChartView.swift
+//  WeightBarChartView.swift
 //  Step Tracker
 //
-//  Created by Victor Marquez on 26/5/24.
+//  Created by Victor Marquez on 30/5/24.
 //
 
 import SwiftUI
 import Charts
 
-struct StepBarChartView: View {
+
+struct WeightBarChartView: View {
+
     @State private var rawSelectedDate:Date?
-    var  selectedStat: HealthMetricContext
-    var chartData: [HealthMetric]
     
-    var avgStepCount: Double {
-        guard !chartData.isEmpty else {return 0}
-        let totalStep = chartData.reduce(0) { $0 + $1.value }
-        return totalStep/Double(chartData.count)
-    }
-    
-    var selectedHealthMetric: HealthMetric? {
+    var chartData: [WeekdayChartData]
+
+    var selectedHealthMetric: WeekdayChartData? {
         guard let rawSelectedDate else { return nil}
         let selectedMetric = chartData.first{
             Calendar.current.isDate(rawSelectedDate, inSameDayAs: $0.date)
@@ -30,23 +26,19 @@ struct StepBarChartView: View {
     
     var body: some View {
         VStack {
-            NavigationLink(value: selectedStat) {
                 HStack{
                     VStack(alignment:.leading){
-                        Label("Steps", systemImage: "figure.walk")
+                        Label("Average Weight Change", systemImage: "figure")
                             .font(.title3.bold())
-                            .foregroundStyle(.pink)
+                            .foregroundStyle(.indigo)
                         
-                        Text("Avg: \(Int(avgStepCount)) Steps")
+                        Text("Per Weekday (Last 28 Days)")
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                           
                     }
                     Spacer()
-                    Image(systemName: "chevron.right")
-                        .foregroundStyle(.secondary)
                 }
                 
-            }
             .foregroundColor(.secondary)
             .padding(.bottom, 12)
             
@@ -64,23 +56,20 @@ struct StepBarChartView: View {
                         }
                     
                 }
-                RuleMark(y: .value("Average", avgStepCount))
-                    .foregroundStyle(Color.secondary)
-                    .lineStyle(.init(lineWidth:1, dash: [5]))
-                ForEach(chartData){ step in
+                ForEach(chartData){ weight in
                     BarMark(
-                        x: .value("Date", step.date, unit: .day),
-                        y: .value("Steps", step.value)
+                        x: .value("Date",  weight.date, unit: .day),
+                        y: .value("Steps", weight.value)
                     )
-                    .foregroundStyle(.pink.gradient)
-                    .opacity(rawSelectedDate == nil || step.date == selectedHealthMetric?.date ? 1.0 : 0.3)
+                    .foregroundStyle(weight.value > 0 ? Color.indigo.gradient : Color.mint.gradient)
+                    .opacity(rawSelectedDate == nil || weight.date == selectedHealthMetric?.date ? 1.0 : 0.3)
                 }
             }
             .frame(height:150)
             .chartXSelection(value: $rawSelectedDate.animation(.easeInOut))
             .chartXAxis{
-                AxisMarks {value in
-                    AxisValueLabel(format: .dateTime.month(.defaultDigits).day())
+                AxisMarks(values: .stride(by: .day)){
+                    AxisValueLabel(format: .dateTime.weekday(), centered: true)
                 }
                 
             }
@@ -93,21 +82,17 @@ struct StepBarChartView: View {
                 }
             }
             
-            
-            
         }.padding()
          .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
-
     }
-    
     var annotationView: some View{
         VStack(alignment:.leading){
             Text(selectedHealthMetric?.date ?? .now, format: .dateTime.weekday(.abbreviated).month(.abbreviated).day())
                 .font(.footnote.bold())
                 .foregroundStyle(.secondary)
-            Text(selectedHealthMetric?.value ?? 0, format: .number.precision(.fractionLength(0)))
+            Text(selectedHealthMetric?.value ?? 0, format: .number.precision(.fractionLength(2)))
                 .fontWeight(.heavy)
-                .foregroundStyle(.pink)
+                .foregroundStyle((selectedHealthMetric?.value ?? 0) >= 0 ? Color.indigo : Color.mint)
         }
         .padding(12)
         .background(
@@ -117,9 +102,8 @@ struct StepBarChartView: View {
         )
         
     }
-
 }
 
 #Preview {
-    StepBarChartView(selectedStat: .steps, chartData: MockData.steps)
+    WeightBarChartView(chartData: MockData.weightsDiff)
 }
