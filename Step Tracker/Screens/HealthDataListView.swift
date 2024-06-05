@@ -15,6 +15,8 @@ struct HealthDataListView: View {
     @State private var addDataDate: Date  = .now
     @State private var valueToAdd: String = ""
     
+    @Binding var isShowingPermissionPriming: Bool
+    
     var metric: HealthMetricContext
     
     var listData: [HealthMetric] {
@@ -62,14 +64,29 @@ struct HealthDataListView: View {
                     Button("Add Data"){
                         Task {
                             if metric == .steps {
-                                await hkManager.addStepData(for: addDataDate, value: Double(valueToAdd)!)
-                                await hkManager.fetchStepCount()
+                                
+                                do {
+                                    try await hkManager.addStepData(for: addDataDate, value: Double(valueToAdd)!)
+                                    try await hkManager.fetchStepCount()
+                                } catch STError.authNotDetermined {
+                                    isShowingPermissionPriming = true
+                                } catch STError.sharingDenied(let quantity){
+                                    print("Sharing denied for \(quantity)")
+                                } catch {
+                                    print("Data List View Unable to complete request")
+                                }
+                                
                                 isShowingAddData = false
                             } else {
-                                await hkManager.addWeightData(for: addDataDate, value: Double(valueToAdd)!)
-                                await hkManager.fetchWeightsDiff()
-                                await hkManager.fetchWeights()
-                                isShowingAddData = false
+                                
+                                do {
+                                   try await hkManager.addWeightData(for: addDataDate, value: Double(valueToAdd)!)
+                                   try await hkManager.fetchWeightsDiff()
+                                   try await hkManager.fetchWeights()
+                                } catch{
+                                    
+                                }
+
                             }
                         }
                     }
@@ -86,7 +103,7 @@ struct HealthDataListView: View {
 
 #Preview {
     NavigationStack{
-        HealthDataListView(metric: .steps)
+        HealthDataListView(isShowingPermissionPriming: .constant(false), metric: .steps)
             .environment(HealthKitManager())
     }
 }
