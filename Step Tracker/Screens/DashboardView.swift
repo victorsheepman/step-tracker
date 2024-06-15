@@ -58,6 +58,7 @@ struct DashboardView: View {
                     try await hkManager.fetchStepCount()
                     try await hkManager.fetchWeights()
                     try await hkManager.fetchWeightsDiff()
+                 //   try await hkManager.addSimulatorData()
                 } catch STError.authNotDetermined{
                     isShowingPermissionPrimingSheet = true
                 } catch STError.noData {
