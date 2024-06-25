@@ -11,6 +11,7 @@ import Charts
 struct WeightLineChartView: View {
     
     @State private var rawSelectedDate: Date?
+    @State private var selectedDay: Date?
     
     var selectedStat: HealthMetricContext
     var chartData: [HealthMetric]
@@ -100,8 +101,15 @@ struct WeightLineChartView: View {
             }
             
             
-        }.padding()
+        }
+         .padding()
          .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
+         .sensoryFeedback(.selection, trigger: selectedDay)
+         .onChange(of: rawSelectedDate) { oldValue, newValue in
+             if oldValue?.weekdayInt != newValue?.weekdayInt {
+                 selectedDay = newValue
+             }
+         }
     }
     var annotationView: some View{
         VStack(alignment:.leading){
