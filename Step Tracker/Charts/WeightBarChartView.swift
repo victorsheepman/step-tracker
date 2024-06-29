@@ -12,6 +12,7 @@ import Charts
 struct WeightBarChartView: View {
 
     @State private var rawSelectedDate:Date?
+    @State private var selectedDay: Date?
     
     var chartData: [WeekdayChartData]
 
@@ -42,48 +43,62 @@ struct WeightBarChartView: View {
             .foregroundColor(.secondary)
             .padding(.bottom, 12)
             
-            //GRAFICO
-            Chart{
-                if let selectedHealthMetric {
-                    RuleMark(x: .value("Selected Metric", selectedHealthMetric.date, unit:.day))
-                        .foregroundStyle(.secondary.opacity(0.3))
-                        .offset(y:-10)
-                        .annotation(position: .top,
-                                    spacing: 40,
-                                    overflowResolution: .init(x:.fit(to:.chart), y:.disabled)
-                        ){
-                            annotationView
-                        }
+            
+            if chartData.isEmpty {
+                ChartEmptyView(systemImageName: "chart.bar", title: "No Data", description: "There is no step weight data from the Health App")
+            } else {
+                //GRAFICO
+                Chart{
+                    if let selectedHealthMetric {
+                        RuleMark(x: .value("Selected Metric", selectedHealthMetric.date, unit:.day))
+                            .foregroundStyle(.secondary.opacity(0.3))
+                            .offset(y:-10)
+                            .annotation(position: .top,
+                                        spacing: 40,
+                                        overflowResolution: .init(x:.fit(to:.chart), y:.disabled)
+                            ){
+                                annotationView
+                            }
+                        
+                    }
+                    ForEach(chartData){ weight in
+                        BarMark(
+                            x: .value("Date",  weight.date, unit: .day),
+                            y: .value("Steps", weight.value)
+                        )
+                        .foregroundStyle(weight.value > 0 ? Color.indigo.gradient : Color.mint.gradient)
+                        .opacity(rawSelectedDate == nil || weight.date == selectedHealthMetric?.date ? 1.0 : 0.3)
+                    }
+                }
+                .frame(height:150)
+                .chartXSelection(value: $rawSelectedDate.animation(.easeInOut))
+                .chartXAxis{
+                    AxisMarks(values: .stride(by: .day)){
+                        AxisValueLabel(format: .dateTime.weekday(), centered: true)
+                    }
                     
                 }
-                ForEach(chartData){ weight in
-                    BarMark(
-                        x: .value("Date",  weight.date, unit: .day),
-                        y: .value("Steps", weight.value)
-                    )
-                    .foregroundStyle(weight.value > 0 ? Color.indigo.gradient : Color.mint.gradient)
-                    .opacity(rawSelectedDate == nil || weight.date == selectedHealthMetric?.date ? 1.0 : 0.3)
-                }
-            }
-            .frame(height:150)
-            .chartXSelection(value: $rawSelectedDate.animation(.easeInOut))
-            .chartXAxis{
-                AxisMarks(values: .stride(by: .day)){
-                    AxisValueLabel(format: .dateTime.weekday(), centered: true)
-                }
-                
-            }
-            .chartYAxis{
-                AxisMarks {value in
-                    AxisGridLine()
-                        .foregroundStyle(Color.secondary.opacity(0.3))
-                    
-                    AxisValueLabel((value.as(Double.self) ?? 0).formatted(.number.notation(.compactName)))
+                .chartYAxis{
+                    AxisMarks {value in
+                        AxisGridLine()
+                            .foregroundStyle(Color.secondary.opacity(0.3))
+                        
+                        AxisValueLabel((value.as(Double.self) ?? 0).formatted(.number.notation(.compactName)))
+                    }
                 }
             }
             
-        }.padding()
+           
+            
+        }
+         .padding()
          .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
+         .sensoryFeedback(.selection, trigger: selectedDay)
+         .onChange(of: rawSelectedDate) { oldValue, newValue in
+             if oldValue?.weekdayInt != newValue?.weekdayInt {
+                 selectedDay = newValue
+             }
+         }
     }
     var annotationView: some View{
         VStack(alignment:.leading){
