@@ -31,27 +31,7 @@ struct StepBarChartView: View {
     }
     
     var body: some View {
-        VStack {
-            NavigationLink(value: selectedStat) {
-                HStack{
-                    VStack(alignment:.leading){
-                        Label("Steps", systemImage: "figure.walk")
-                            .font(.title3.bold())
-                            .foregroundStyle(.pink)
-                        
-                        Text("Avg: \(Int(avgStepCount)) Steps")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .foregroundStyle(.secondary)
-                }
-                
-            }
-            .foregroundColor(.secondary)
-            .padding(.bottom, 12)
-            
+        ChartsContainer(title:"Steps", symbol: "figure.walk", subTitle: "Avg: \(Int(avgStepCount)) steps", isNav: true, context: .steps) {
             if chartData.isEmpty {                
                 ChartEmptyView(systemImageName: "chart.bar", title: "No Data", description: "There is no step count data from the Health App")
             } else {
@@ -103,8 +83,6 @@ struct StepBarChartView: View {
             
             
         }
-         .padding()
-         .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
          .sensoryFeedback(.selection, trigger: selectedDay)
          .onChange(of: rawSelectedDate) { oldValue, newValue in
              if oldValue?.weekdayInt != newValue?.weekdayInt {
