@@ -10,12 +10,12 @@ import Charts
 
 struct StepPieChartView: View {
     
-    var chartData: [WeekdayChartData] = []
+    var chartData: [DateValueChartData] = []
     
     @State private var rawSelectedChartValue: Double? = 0
     @State private var selectedDay: Date?
     
-    var selectedWeekday: WeekdayChartData? {
+    var selectedWeekday: DateValueChartData? {
         guard let rawSelectedChartValue else { return nil }
         var total = 0.0
         return chartData.first {
