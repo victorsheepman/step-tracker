@@ -10,12 +10,12 @@ import Charts
 
 struct StepPieChartView: View {
     
-    var chartData: [WeekdayChartData] = []
+    var chartData: [DateValueChartData] = []
     
     @State private var rawSelectedChartValue: Double? = 0
     @State private var selectedDay: Date?
     
-    var selectedWeekday: WeekdayChartData? {
+    var selectedWeekday: DateValueChartData? {
         guard let rawSelectedChartValue else { return nil }
         var total = 0.0
         return chartData.first {
@@ -25,19 +25,8 @@ struct StepPieChartView: View {
     }
     
     var body: some View {
-        VStack(alignment:.leading){
-            
-            VStack(alignment:.leading){
-                Label("Averages", systemImage: "calendar")
-                    .font(.title3.bold())
-                    .foregroundStyle(.pink)
-                
-                Text("Last 20 days")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            
-            .padding(.bottom, 12)
+        let config = ChartContainerConfiguration(title:"Averages", symbol: "calendar", subTitle: "Last 20 days", isNav: true, context: .steps)
+        ChartsContainer(config: config) {
             
             if chartData.isEmpty {
                 ChartEmptyView(systemImageName: "chart.pie", title: "No Dat", description: "There is no step count data from the Health App")
@@ -88,8 +77,6 @@ struct StepPieChartView: View {
             
             
         }
-        .padding()
-        .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
         .sensoryFeedback(.selection, trigger: selectedDay)
         .onChange(of:selectedWeekday){ oldValue, newValue in
             guard let oldValue, let newValue else { return }
