@@ -21,7 +21,8 @@ struct WeightBarChartView: View {
     }
     
     var body: some View {
-        ChartsContainer(title:"Average Weight Change", symbol: "figure", subTitle:"Per Weekday (Last 28 Days)", isNav: true, context:.weight) {
+        let config = ChartContainerConfiguration(title:"Average Weight Change", symbol: "figure", subTitle:"Per Weekday (Last 28 Days)", isNav: true, context:.weight)
+        ChartsContainer(config:config) {
              
             
             if chartData.isEmpty {
@@ -30,15 +31,7 @@ struct WeightBarChartView: View {
                 //GRAFICO
                 Chart{
                     if let selectedData {
-                        RuleMark(x: .value("Selected Metric", selectedData.date, unit:.day))
-                            .foregroundStyle(.secondary.opacity(0.3))
-                            .offset(y:-10)
-                            .annotation(position: .top,
-                                        spacing: 40,
-                                        overflowResolution: .init(x:.fit(to:.chart), y:.disabled)
-                            ){
-                                ChartAnnotationView(data: selectedData, context: .weight)
-                            }
+                        ChartAnnotationView(data: selectedData, context: .weight)
                         
                     }
                     ForEach(chartData){ weight in

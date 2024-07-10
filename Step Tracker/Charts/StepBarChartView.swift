@@ -20,23 +20,15 @@ struct StepBarChartView: View {
     
 
     var body: some View {
-        ChartsContainer(title:"Steps", symbol: "figure.walk", subTitle: "Avg: \(Int(ChartHelper.averageValue(for: chartData))) steps", isNav: true, context: .steps) {
+        let config = ChartContainerConfiguration(title:"Steps", symbol: "figure.walk", subTitle: "Avg: \(Int(ChartHelper.averageValue(for: chartData))) steps", isNav: true, context: .steps)
+        ChartsContainer(config: config) {
             if chartData.isEmpty {
                 ChartEmptyView(systemImageName: "chart.bar", title: "No Data", description: "There is no step count data from the Health App")
             } else {
                 //GRAFICO
                 Chart{
                     if let selectedData {
-                        RuleMark(x: .value("Selected Metric", selectedData.date, unit:.day))
-                            .foregroundStyle(.secondary.opacity(0.3))
-                            .offset(y:-10)
-                            .annotation(position: .top,
-                                        spacing: 40,
-                                        overflowResolution: .init(x:.fit(to:.chart), y:.disabled)
-                            ){
-                                ChartAnnotationView(data: selectedData, context: .steps)
-                            }
-                        
+                        ChartAnnotationView(data: selectedData, context: .steps)
                     }
                     RuleMark(y: .value("Average", ChartHelper.averageValue(for: chartData)))
                         .foregroundStyle(Color.secondary)

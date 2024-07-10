@@ -24,21 +24,14 @@ struct WeightLineChartView: View {
     }
     
     var body: some View {
-        ChartsContainer(title: "Weight", symbol: "figure", subTitle: "Avg:  180 lbs", isNav: true, context:.weight) {
+        let config = ChartContainerConfiguration(title: "Weight", symbol: "figure", subTitle: "Avg:  180 lbs", isNav: true, context:.weight)
+        ChartsContainer(config:config) {
             if chartData.isEmpty {
                 ChartEmptyView(systemImageName: "chart.xyaxis.line", title: "No Data", description: "There is no step count data from the Health App")
             } else {
                 Chart {
                     if let selectedData {
-                        RuleMark(x: .value("Selected Metric", selectedData.date, unit:.day))
-                            .foregroundStyle(.secondary.opacity(0.3))
-                            .offset(y:-10)
-                            .annotation(position: .top,
-                                        spacing: 40,
-                                        overflowResolution: .init(x:.fit(to:.chart), y:.disabled)
-                            ){
-                                ChartAnnotationView(data: selectedData, context: .weight)
-                            }
+                        ChartAnnotationView(data: selectedData, context: .steps)
                     }
                     RuleMark(y: .value("Goal", 155))
                         .foregroundStyle(.mint)
