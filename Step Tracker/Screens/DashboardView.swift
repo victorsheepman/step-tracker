@@ -56,28 +56,14 @@ struct DashboardView: View {
             }
             .padding()
             .task{
-                
-                do {
-                    try await hkManager.fetchStepCount()
-                    try await hkManager.fetchWeights()
-                    try await hkManager.fetchWeightsDiff()
-                 //   try await hkManager.addSimulatorData()
-                } catch STError.authNotDetermined{
-                    isShowingPermissionPrimingSheet = true
-                } catch STError.noData {
-                    fetchError = .noData
-                    isShowingAlert = true
-                } catch {
-                    fetchError = .unableToCompleteRequest
-                    isShowingAlert = true
-                }
+                fetchHealthData()
             }
             .navigationTitle("Dashboard")
             .navigationDestination(for: HealthMetricContext.self) { metric in
                 HealthDataListView(isShowingPermissionPriming: $isShowingPermissionPrimingSheet, metric: metric)
             }
             .sheet(isPresented: $isShowingPermissionPrimingSheet, onDismiss:{
-                
+                fetchHealthData()
             }, content:{
                 HealthKitPermissionPrimingView()
             })
@@ -90,6 +76,29 @@ struct DashboardView: View {
             
         }.tint( isStep ? .pink : .indigo)
         
+    }
+    private func fetchHealthData() {
+        Task {
+            
+            do {
+                async let step = hkManager.fetchStepCount()
+                async let weightsForLineChart = hkManager.fetchWeights(daysBack: 28)
+                async let weightsDiffBarChart = hkManager.fetchWeights(daysBack: 29)
+                
+                hkManager.stepData       = try await step
+                hkManager.weightData     = try await weightsForLineChart
+                hkManager.weightDiffData = try await weightsDiffBarChart
+ 
+            } catch STError.authNotDetermined{
+                isShowingPermissionPrimingSheet = true
+            } catch STError.noData {
+                fetchError = .noData
+                isShowingAlert = true
+            } catch {
+                fetchError = .unableToCompleteRequest
+                isShowingAlert = true
+            }
+        }
     }
 }
 

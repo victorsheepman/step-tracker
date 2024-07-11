@@ -84,11 +84,20 @@ struct HealthDataListView: View {
                             return
                         }
                         Task {
-                            if metric == .steps {
-                                
                                 do {
-                                    try await hkManager.addStepData(for: addDataDate, value: Double(valueToAdd)!)
-                                    try await hkManager.fetchStepCount()
+                                    if metric == .steps {
+                                        try await hkManager.addStepData(for: addDataDate, value: Double(valueToAdd)!)
+                                        hkManager.stepData = try await hkManager.fetchStepCount()
+                                    } else {
+                                        try await hkManager.addWeightData(for: addDataDate, value: value)
+                                      
+                                        async let weightsForLineChart = hkManager.fetchWeights(daysBack: 28)
+                                        async let weightsDiffBarChart = hkManager.fetchWeights(daysBack: 29)
+
+                                        hkManager.weightData     = try await weightsForLineChart
+                                        hkManager.weightDiffData = try await weightsDiffBarChart
+                                    }
+                                    
                                 } catch STError.authNotDetermined {
                                     isShowingPermissionPriming = true
                                 } catch STError.sharingDenied(let quantity){
@@ -100,22 +109,7 @@ struct HealthDataListView: View {
                                 }
                                 
                                 isShowingAddData = false
-                            } else {
-                                
-                                do {
-                                   try await hkManager.addWeightData(for: addDataDate, value: Double(valueToAdd)!)
-                                   try await hkManager.fetchWeightsDiff()
-                                   try await hkManager.fetchWeights()
-                                }catch STError.authNotDetermined {
-                                    isShowingPermissionPriming = true
-                                } catch STError.sharingDenied(let quantity){
-                                    writeError = .sharingDenied(quantityType: quantity)
-                                    isShowingAlert = true
-                                } catch {
-                                    writeError = .unableToCompleteRequest
-                                    isShowingAlert = true
-                                }
-                            }
+                            
                         }
                     }
                 }
