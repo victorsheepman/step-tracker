@@ -14,13 +14,14 @@ struct StepPieChartView: View {
     
     @State private var rawSelectedChartValue: Double? = 0
     @State private var selectedDay: Date?
+    @State private var lastSelectedValue: Double = 0
     
     var selectedWeekday: DateValueChartData? {
-        guard let rawSelectedChartValue else { return nil }
+      
         var total = 0.0
         return chartData.first {
             total += $0.value
-            return rawSelectedChartValue <= total
+            return lastSelectedValue <= total
         }
     }
     
@@ -47,7 +48,17 @@ struct StepPieChartView: View {
                             
                     }
                 }
-                .chartAngleSelection(value: $rawSelectedChartValue.animation(.easeInOut))
+                .chartAngleSelection(value: $rawSelectedChartValue)
+                .onChange(of: rawSelectedChartValue ){ oldValue, newValue in
+                    withAnimation(.easeInOut){
+                        guard let newValue else {
+                            lastSelectedValue = oldValue ?? 0
+                            return
+                        }
+                        lastSelectedValue = newValue
+                    }
+                  
+                }
                 .frame(height: 240)
                 .chartBackground { proxy in
                     GeometryReader { geo in
