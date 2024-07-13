@@ -79,6 +79,37 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
+		8408C11D2C4308C30098E0B9 /* Charts */ = {
+			isa = PBXGroup;
+			children = (
+				841A54272C03A5E100DBBB60 /* StepBarChartView.swift */,
+				841A54372C03B64F00DBBB60 /* StepPieChartView.swift */,
+				84DD24EF2C092B6F00485C5A /* WeightBarChartView.swift */,
+				8403503C2C068B5E00D99A3B /* WeightLineChartView.swift */,
+			);
+			path = Charts;
+			sourceTree = "<group>";
+		};
+		8408C11E2C4308D10098E0B9 /* Chart Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				841A542D2C03AD1900DBBB60 /* ChartMath.swift */,
+				84D1BE162C2CC9EE004567CA /* ChartEmptyView.swift */,
+				84D5B5FD2C3DEB4100C9F995 /* ChartHelper.swift */,
+			);
+			path = "Chart Utilities";
+			sourceTree = "<group>";
+		};
+		8408C11F2C4308D90098E0B9 /* Chart Custom views */ = {
+			isa = PBXGroup;
+			children = (
+				84A4269B2C3739ED00790E0C /* ChartsContainer.swift */,
+				84D5B5FF2C3DEDDC00C9F995 /* ChartAnnotationView.swift */,
+				841A542F2C03AD4D00DBBB60 /* WeekdayChartData.swift */,
+			);
+			path = "Chart Custom views";
+			sourceTree = "<group>";
+		};
 		841A54292C03A88A00DBBB60 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
@@ -92,16 +123,9 @@
 		841A542A2C03A8A100DBBB60 /* Charts */ = {
 			isa = PBXGroup;
 			children = (
-				841A54272C03A5E100DBBB60 /* StepBarChartView.swift */,
-				841A542D2C03AD1900DBBB60 /* ChartMath.swift */,
-				841A542F2C03AD4D00DBBB60 /* WeekdayChartData.swift */,
-				841A54372C03B64F00DBBB60 /* StepPieChartView.swift */,
-				8403503C2C068B5E00D99A3B /* WeightLineChartView.swift */,
-				84DD24EF2C092B6F00485C5A /* WeightBarChartView.swift */,
-				84D1BE162C2CC9EE004567CA /* ChartEmptyView.swift */,
-				84A4269B2C3739ED00790E0C /* ChartsContainer.swift */,
-				84D5B5FD2C3DEB4100C9F995 /* ChartHelper.swift */,
-				84D5B5FF2C3DEDDC00C9F995 /* ChartAnnotationView.swift */,
+				8408C11F2C4308D90098E0B9 /* Chart Custom views */,
+				8408C11E2C4308D10098E0B9 /* Chart Utilities */,
+				8408C11D2C4308C30098E0B9 /* Charts */,
 			);
 			path = Charts;
 			sourceTree = "<group>";
