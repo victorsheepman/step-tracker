@@ -11,7 +11,7 @@ import Charts
 enum HealthMetricContext: CaseIterable, Identifiable{
     case steps, weight
     var id: Self { self }
-    var title: String{
+    var title: String {
         switch self {
         case .steps:
             return "Steps"
@@ -49,20 +49,19 @@ struct DashboardView: View {
                         StepBarChartView(chartData: ChartHelper.convert(data: hkManager.stepData ))
                         StepPieChartView(chartData: ChartMath.averageWeekdauCount(for: hkManager.stepData))
                     case .weight:
-                        WeightLineChartView(chartData:ChartHelper.convert(data:  hkManager.weightData))
+                        WeightLineChartView(chartData: ChartHelper.convert(data:  hkManager.weightData))
                         WeightBarChartView(chartData: ChartMath.averageDailyWeightDiffs(for: hkManager.weightDiffData))
                     }
                 }
             }
             .padding()
-            .task{
-                
+            .task {
                 do {
                     try await hkManager.fetchStepCount()
                     try await hkManager.fetchWeights()
                     try await hkManager.fetchWeightsDiff()
-                 //   try await hkManager.addSimulatorData()
-                } catch STError.authNotDetermined{
+                 // try await hkManager.addSimulatorData()
+                } catch STError.authNotDetermined {
                     isShowingPermissionPrimingSheet = true
                 } catch STError.noData {
                     fetchError = .noData
