@@ -24,10 +24,20 @@ struct WeightLineChartView: View {
     }
     
     var body: some View {
-        let config = ChartContainerConfiguration(title: "Weight", symbol: "figure", subTitle: "Avg:  180 lbs", isNav: true, context:.weight)
+        let config = ChartContainerConfiguration(
+            title: "Weight",
+            symbol: "figure",
+            subTitle: "Avg:  180 lbs",
+            isNav: true,
+            context: .weight
+        )
         ChartsContainer(config:config) {
             if chartData.isEmpty {
-                ChartEmptyView(systemImageName: "chart.xyaxis.line", title: "No Data", description: "There is no step count data from the Health App")
+                ChartEmptyView(
+                    systemImageName: "chart.xyaxis.line",
+                    title: "No Data",
+                    description: "There is no step count data from the Health App"
+                )
             } else {
                 Chart {
                     if let selectedData {
@@ -37,8 +47,6 @@ struct WeightLineChartView: View {
                         .foregroundStyle(.mint)
                         .lineStyle(.init(lineWidth: 1, dash: [5]))
                         
-                    
-                    
                     ForEach(chartData){ weights in
                         
                         AreaMark(
@@ -72,10 +80,6 @@ struct WeightLineChartView: View {
                     }
                 }
             }
-            
-          
-            
-            
         }
          .sensoryFeedback(.selection, trigger: selectedDay)
          .onChange(of: rawSelectedDate) { oldValue, newValue in

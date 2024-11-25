@@ -7,6 +7,7 @@
 
 import Foundation
 import Algorithms
+
 struct ChartMath {
     
     static func averageWeekdauCount(for metric: [HealthMetric]) -> [DateValueChartData] {
