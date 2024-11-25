@@ -22,14 +22,18 @@ enum HealthMetricContext: CaseIterable, Identifiable{
 }
 
 struct DashboardView: View {
+    
     @Environment(HealthKitManager.self) private var hkManager
-    @State private var isShowingPermissionPrimingSheet = false
-    @State private var rawSelectedDate:Date?
-    @State private var selectedStat:HealthMetricContext = .steps
-    @State private var isShowingAlert = false
+    
+    @State private var isShowingPermissionPrimingSheet: Bool = false
+    @State private var rawSelectedDate: Date?
+    @State private var selectedStat: HealthMetricContext = .steps
+    @State private var isShowingAlert: Bool = false
     @State private var fetchError: STError = .noData
     
-    var isStep: Bool {selectedStat == .steps}
+    var isStep: Bool {
+        selectedStat == .steps
+    }
     
     var body: some View {
         NavigationStack {
@@ -40,7 +44,6 @@ struct DashboardView: View {
                             Text($0.title)
                         }
                     }.pickerStyle(.segmented)
-                    
                     switch selectedStat {
                     case .steps:
                         StepBarChartView(chartData: ChartHelper.convert(data: hkManager.stepData ))
@@ -49,9 +52,6 @@ struct DashboardView: View {
                         WeightLineChartView(chartData:ChartHelper.convert(data:  hkManager.weightData))
                         WeightBarChartView(chartData: ChartMath.averageDailyWeightDiffs(for: hkManager.weightDiffData))
                     }
-                    
-                    
-                   
                 }
             }
             .padding()
@@ -76,20 +76,16 @@ struct DashboardView: View {
             .navigationDestination(for: HealthMetricContext.self) { metric in
                 HealthDataListView(isShowingPermissionPriming: $isShowingPermissionPrimingSheet, metric: metric)
             }
-            .sheet(isPresented: $isShowingPermissionPrimingSheet, onDismiss:{
-                
-            }, content:{
+            .sheet(isPresented: $isShowingPermissionPrimingSheet) {
                 HealthKitPermissionPrimingView()
-            })
+            }
             .alert(isPresented: $isShowingAlert, error: fetchError) { fetchError in
-                //
+                
             } message: { fetchError in
                 Text(fetchError.localizedDescription)
             }
-
             
         }.tint( isStep ? .pink : .indigo)
-        
     }
 }
 
