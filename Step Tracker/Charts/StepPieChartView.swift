@@ -33,7 +33,7 @@ struct StepPieChartView: View {
             } else {
                 Chart{
                     ForEach(chartData) { weekday in
-                        SectorMark(
+                        SectorMark (
                             angle: .value("Average Steps", weekday.value),
                             innerRadius: .ratio(0.610),
                             outerRadius: selectedWeekday?.date.weekdayInt == weekday.date.weekdayInt ? 140 : 110,
@@ -42,9 +42,6 @@ struct StepPieChartView: View {
                         .foregroundStyle(.pink.gradient)
                         .cornerRadius(6)
                         .opacity(selectedWeekday?.date.weekdayInt == weekday.date.weekdayInt ? 1.0 : 0.3)
-                       
-                        
-                            
                     }
                 }
                 .chartAngleSelection(value: $rawSelectedChartValue.animation(.easeInOut))
