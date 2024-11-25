@@ -24,12 +24,24 @@ struct StepPieChartView: View {
         }
     }
     
+
     var body: some View {
-        let config = ChartContainerConfiguration(title:"Averages", symbol: "calendar", subTitle: "Last 20 days", isNav: true, context: .steps)
+        let config = ChartContainerConfiguration(
+            title:"Averages",
+            symbol: "calendar",
+            subTitle: "Last 20 days",
+            isNav: true,
+            context: .steps
+        )
+        
         ChartsContainer(config: config) {
             
             if chartData.isEmpty {
-                ChartEmptyView(systemImageName: "chart.pie", title: "No Dat", description: "There is no step count data from the Health App")
+                ChartEmptyView(
+                    systemImageName: "chart.pie",
+                    title: "No Dat",
+                    description: "There is no step count data from the Health App"
+                )
             } else {
                 Chart{
                     ForEach(chartData) { weekday in
@@ -51,16 +63,8 @@ struct StepPieChartView: View {
                         if let plotFrame = proxy.plotFrame {
                             let frame = geo[plotFrame]
                             if let selectedWeekday {
-                                VStack{
-                                    Text(selectedWeekday.date.weekdayTitle)
-                                        .font(.title3.bold())
-                                    
-                                    Text(selectedWeekday.value, format: .number.precision(.fractionLength(0)))
-                                        .fontWeight(.medium)
-                                        .foregroundStyle(.secondary)
-                                        .contentTransition(.numericText())
-                                }
-                                .position(x:frame.midX, y: frame.midY)
+                                infoWeekDay(selectedWeekday)
+                                    .position(x:frame.midX, y: frame.midY)
                             }
                         }
                         
@@ -68,11 +72,6 @@ struct StepPieChartView: View {
                 }
                 
             }
-            
-
-            
-            
-            
         }
         .sensoryFeedback(.selection, trigger: selectedDay)
         .onChange(of:selectedWeekday){ oldValue, newValue in
@@ -81,6 +80,19 @@ struct StepPieChartView: View {
                 selectedDay = newValue.date
             }
         }
+    }
+    
+    func infoWeekDay(_ selectedWeekday: DateValueChartData) -> some View {
+        VStack{
+            Text(selectedWeekday.date.weekdayTitle)
+                .font(.title3.bold())
+            
+            Text(selectedWeekday.value, format: .number.precision(.fractionLength(0)))
+                .fontWeight(.medium)
+                .foregroundStyle(.secondary)
+                .contentTransition(.numericText())
+        }
+       
     }
 }
 
