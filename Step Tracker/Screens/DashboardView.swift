@@ -8,18 +8,7 @@
 import SwiftUI
 import Charts
 
-enum HealthMetricContext: CaseIterable, Identifiable{
-    case steps, weight
-    var id: Self { self }
-    var title: String {
-        switch self {
-        case .steps:
-            return "Steps"
-        case .weight:
-            return "Weight"
-        }
-    }
-}
+
 
 struct DashboardView: View {
     
