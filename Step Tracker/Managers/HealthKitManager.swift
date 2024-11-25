@@ -9,45 +9,6 @@ import Foundation
 import HealthKit
 import Observation
 
-enum STError: LocalizedError {
-    case authNotDetermined
-    case noData
-    case unableToCompleteRequest
-    case sharingDenied(quantityType: String)
-    case invalidValue
-    
-    var errorDescription: String?{
-        switch self {
-            case .authNotDetermined:
-                "Need Access to Health Data"
-            case .sharingDenied(_):
-                "No Write Access"
-            case .noData:
-                "No Data"
-            case .unableToCompleteRequest:
-                "unable to Complete Request"
-            case .invalidValue:
-                "Invalid Value"
-        }
-    }
-    
-    var failureReason: String {
-        switch self {
-            case .authNotDetermined:
-                "You have not given access to your health data. Please go to Setting > Health > Data Access & Devices."
-            case .sharingDenied(let quantity):
-                "You denied"
-            case .noData:
-                "Three is not data"
-            case .unableToCompleteRequest:
-                "unable"
-            case .invalidValue:
-                "Invalid Value"
-        }
-    }
-    
-    
-}
 
 @Observable class HealthKitManager {
     
@@ -112,13 +73,10 @@ enum STError: LocalizedError {
             intervalComponents: .init(day:1)
         )
         
-        let weights = try! await weightQuery.result(for: store)
-        weightData = weights.statistics().map{ .init(date: $0.startDate, value: $0.mostRecentQuantity()?.doubleValue(for: .pound()) ?? 0) }
-        
         do {
             let weights = try! await weightQuery.result(for: store)
             weightData = weights.statistics().map{ .init(date: $0.startDate, value: $0.mostRecentQuantity()?.doubleValue(for: .pound()) ?? 0) }
-
+         
         } catch HKError.errorNoData {
             throw STError.noData
         } catch {
@@ -162,7 +120,7 @@ enum STError: LocalizedError {
     func addStepData(for date: Date, value: Double) async throws {
         
 
-        
+       
         let status = store.authorizationStatus(for: HKQuantityType(.stepCount))
         
         switch status {
@@ -180,10 +138,10 @@ enum STError: LocalizedError {
         let stepQuantity = HKQuantity(unit: .count(), doubleValue: value)
         let stepSample = HKQuantitySample(type: HKQuantityType(.stepCount), quantity: stepQuantity, start: date, end: date)
         
-       
         
         do {
             try await store.save(stepSample)
+            
         } catch {
             throw STError.unableToCompleteRequest
         }
@@ -208,10 +166,11 @@ enum STError: LocalizedError {
         
         let weightQuantity = HKQuantity(unit:  .pound(), doubleValue: value)
         let weightSample = HKQuantitySample(type: HKQuantityType(.bodyMass), quantity: weightQuantity, start: date, end: date)
-       
-        
+      
+
         do {
             try await store.save(weightSample)
+            
         } catch  {
             throw STError.unableToCompleteRequest
         }
