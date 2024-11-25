@@ -20,12 +20,22 @@ struct StepBarChartView: View {
     
 
     var body: some View {
-        let config = ChartContainerConfiguration(title:"Steps", symbol: "figure.walk", subTitle: "Avg: \(Int(ChartHelper.averageValue(for: chartData))) steps", isNav: true, context: .steps)
+        let config = ChartContainerConfiguration(
+            title: "Steps",
+            symbol: "figure.walk",
+            subTitle: "Avg: \(Int(ChartHelper.averageValue(for: chartData))) steps",
+            isNav: true,
+            context: .steps
+        )
         ChartsContainer(config: config) {
             if chartData.isEmpty {
-                ChartEmptyView(systemImageName: "chart.bar", title: "No Data", description: "There is no step count data from the Health App")
+                ChartEmptyView(
+                    systemImageName: "chart.bar",
+                    title: "No Data",
+                    description: "There is no step count data from the Health App"
+                )
             } else {
-                //GRAFICO
+                
                 Chart{
                     if let selectedData {
                         ChartAnnotationView(data: selectedData, context: .steps)
@@ -48,7 +58,6 @@ struct StepBarChartView: View {
                     AxisMarks {value in
                         AxisValueLabel(format: .dateTime.month(.defaultDigits).day())
                     }
-                    
                 }
                 .chartYAxis{
                     AxisMarks {value in
@@ -59,21 +68,15 @@ struct StepBarChartView: View {
                     }
                 }
             }
-            
-            
-            
-            
         }
-         .sensoryFeedback(.selection, trigger: selectedDay)
-         .onChange(of: rawSelectedDate) { oldValue, newValue in
-             if oldValue?.weekdayInt != newValue?.weekdayInt {
-                 selectedDay = newValue
-             }
-         }
-
+        .sensoryFeedback(.selection, trigger: selectedDay)
+        .onChange(of: rawSelectedDate) { oldValue, newValue in
+            if oldValue?.weekdayInt != newValue?.weekdayInt {
+                selectedDay = newValue
+            }
+        }
+        
     }
-    
-
 }
 
 #Preview {

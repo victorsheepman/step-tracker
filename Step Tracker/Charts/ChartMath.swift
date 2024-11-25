@@ -7,6 +7,7 @@
 
 import Foundation
 import Algorithms
+
 struct ChartMath {
     
     static func averageWeekdauCount(for metric: [HealthMetric]) -> [DateValueChartData] {
@@ -24,8 +25,6 @@ struct ChartMath {
             weekdayChartData.append(.init(date: firstValue.date, value: avgSteps))
         }
         
-    
-
         return weekdayChartData
     }
     

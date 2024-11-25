@@ -21,12 +21,21 @@ struct WeightBarChartView: View {
     }
     
     var body: some View {
-        let config = ChartContainerConfiguration(title:"Average Weight Change", symbol: "figure", subTitle:"Per Weekday (Last 28 Days)", isNav: true, context:.weight)
+        let config = ChartContainerConfiguration(
+            title: "Average Weight Change",
+            symbol: "figure",
+            subTitle: "Per Weekday (Last 28 Days)",
+            isNav: true,
+            context: .weight
+        )
+        
         ChartsContainer(config:config) {
-             
-            
             if chartData.isEmpty {
-                ChartEmptyView(systemImageName: "chart.bar", title: "No Data", description: "There is no step weight data from the Health App")
+                ChartEmptyView(
+                    systemImageName: "chart.bar",
+                    title: "No Data",
+                    description: "There is no step weight data from the Health App"
+                )
             } else {
                 //GRAFICO
                 Chart{
@@ -59,10 +68,7 @@ struct WeightBarChartView: View {
                         AxisValueLabel((value.as(Double.self) ?? 0).formatted(.number.notation(.compactName)))
                     }
                 }
-            }
-            
-           
-            
+            }  
         }
          .sensoryFeedback(.selection, trigger: selectedDay)
          .onChange(of: rawSelectedDate) { oldValue, newValue in
