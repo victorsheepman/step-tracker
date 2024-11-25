@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Charts
+
 struct ChartAnnotationView: ChartContent {
     let data: DateValueChartData
     let context: HealthMetricContext
